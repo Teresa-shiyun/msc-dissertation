@@ -1,0 +1,44 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {job_name}
+  namespace: workload
+  labels:
+    runner: experiments
+    run-id: {run_id}
+    arm: "{arm_id}"
+    traffic: "{traffic_id}"
+spec:
+  ttlSecondsAfterFinished: 600
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+        runner: experiments
+        run-id: {run_id}
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: k6
+          image: "{k6_image}"
+          command: ["k6", "run", "--quiet", "/scripts/{script_name}"]
+          env:
+            - name: TARGET_URL
+              value: "{target_url}"
+            - name: WORK_N
+              value: "{work_n}"
+          volumeMounts:
+            - name: scripts
+              mountPath: /scripts
+              readOnly: true
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "1000m"
+              memory: "256Mi"
+      volumes:
+        - name: scripts
+          configMap:
+            name: k6-scripts

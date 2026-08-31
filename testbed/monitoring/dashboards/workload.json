@@ -1,0 +1,205 @@
+{
+  "title": "Workload — cloud/edge orchestration",
+  "uid": "workload-cloud-edge",
+  "schemaVersion": 39,
+  "version": 1,
+  "editable": true,
+  "graphTooltip": 1,
+  "timezone": "browser",
+  "refresh": "10s",
+  "time": {"from": "now-30m", "to": "now"},
+  "tags": ["dissertation", "workload", "cloud-edge"],
+  "templating": {
+    "list": [
+      {
+        "name": "datasource",
+        "type": "datasource",
+        "query": "prometheus",
+        "hide": 0,
+        "refresh": 1,
+        "current": {"selected": false, "text": "Prometheus", "value": "prometheus"}
+      },
+      {
+        "name": "tier",
+        "type": "query",
+        "datasource": {"type": "prometheus", "uid": "${datasource}"},
+        "query": "label_values(workload_requests_total, tier)",
+        "refresh": 1,
+        "includeAll": true,
+        "multi": true,
+        "current": {"selected": true, "text": "All", "value": "$__all"}
+      }
+    ]
+  },
+  "annotations": {
+    "list": [
+      {
+        "name": "Scaling events",
+        "datasource": {"type": "prometheus", "uid": "${datasource}"},
+        "enable": true,
+        "iconColor": "rgba(255, 96, 96, 1)",
+        "expr": "changes(kube_deployment_status_replicas{namespace=\"workload\"}[1m]) > 0",
+        "titleFormat": "{{deployment}} replicas changed",
+        "tagKeys": "deployment"
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "timeseries",
+      "title": "Replicas — by deployment",
+      "datasource": {"type": "prometheus", "uid": "${datasource}"},
+      "gridPos": {"x": 0, "y": 0, "w": 24, "h": 6},
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "min": 0,
+          "custom": {"drawStyle": "line", "lineInterpolation": "stepAfter", "lineWidth": 2, "fillOpacity": 10}
+        }
+      },
+      "options": {"legend": {"displayMode": "table", "placement": "right", "calcs": ["lastNotNull", "max"]}},
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "kube_deployment_status_replicas{namespace=\"workload\"}",
+          "legendFormat": "{{deployment}} (status)"
+        },
+        {
+          "refId": "B",
+          "expr": "kube_deployment_spec_replicas{namespace=\"workload\"}",
+          "legendFormat": "{{deployment}} (spec)"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "timeseries",
+      "title": "Requests per second — by tier",
+      "datasource": {"type": "prometheus", "uid": "${datasource}"},
+      "gridPos": {"x": 0, "y": 6, "w": 12, "h": 8},
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "min": 0,
+          "custom": {"drawStyle": "line", "lineWidth": 2, "fillOpacity": 15}
+        }
+      },
+      "options": {"legend": {"displayMode": "table", "placement": "right", "calcs": ["mean", "max"]}},
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (tier) (rate(workload_requests_total{route=\"/work\", tier=~\"$tier\"}[1m]))",
+          "legendFormat": "{{tier}}"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "timeseries",
+      "title": "p95 latency (ms) — by tier",
+      "datasource": {"type": "prometheus", "uid": "${datasource}"},
+      "gridPos": {"x": 12, "y": 6, "w": 12, "h": 8},
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"color": "green", "value": null},
+              {"color": "orange", "value": 200},
+              {"color": "red", "value": 500}
+            ]
+          },
+          "custom": {"drawStyle": "line", "lineWidth": 2, "fillOpacity": 10, "thresholdsStyle": {"mode": "line+area"}}
+        }
+      },
+      "options": {"legend": {"displayMode": "table", "placement": "right", "calcs": ["mean", "max"]}},
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "histogram_quantile(0.95, sum by (le, tier) (rate(workload_request_duration_seconds_bucket{tier=~\"$tier\",route=\"/work\"}[2m]))) * 1000",
+          "legendFormat": "{{tier}} p95"
+        },
+        {
+          "refId": "B",
+          "expr": "histogram_quantile(0.99, sum by (le, tier) (rate(workload_request_duration_seconds_bucket{tier=~\"$tier\",route=\"/work\"}[2m]))) * 1000",
+          "legendFormat": "{{tier}} p99"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "timeseries",
+      "title": "CPU usage per pod (cores)",
+      "datasource": {"type": "prometheus", "uid": "${datasource}"},
+      "gridPos": {"x": 0, "y": 14, "w": 12, "h": 8},
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "min": 0,
+          "decimals": 3,
+          "custom": {"drawStyle": "line", "lineWidth": 2, "fillOpacity": 10}
+        }
+      },
+      "options": {"legend": {"displayMode": "table", "placement": "right", "calcs": ["mean", "max"]}},
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (pod) (rate(container_cpu_usage_seconds_total{namespace=\"workload\", container=\"workload\"}[1m]))",
+          "legendFormat": "{{pod}}"
+        },
+        {
+          "refId": "B",
+          "expr": "sum(kube_pod_container_resource_limits{namespace=\"workload\", container=\"workload\", resource=\"cpu\"}) by (pod)",
+          "legendFormat": "{{pod}} (limit)"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "Memory usage per pod (MiB)",
+      "datasource": {"type": "prometheus", "uid": "${datasource}"},
+      "gridPos": {"x": 12, "y": 14, "w": 12, "h": 8},
+      "fieldConfig": {
+        "defaults": {
+          "unit": "decmbytes",
+          "min": 0,
+          "custom": {"drawStyle": "line", "lineWidth": 2, "fillOpacity": 10}
+        }
+      },
+      "options": {"legend": {"displayMode": "table", "placement": "right", "calcs": ["mean", "max"]}},
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (pod) (container_memory_working_set_bytes{namespace=\"workload\", container=\"workload\"}) / (1024*1024)",
+          "legendFormat": "{{pod}}"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "timeseries",
+      "title": "In-flight requests — by tier",
+      "datasource": {"type": "prometheus", "uid": "${datasource}"},
+      "gridPos": {"x": 0, "y": 22, "w": 24, "h": 6},
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "min": 0,
+          "custom": {"drawStyle": "line", "lineWidth": 2, "fillOpacity": 10}
+        }
+      },
+      "options": {"legend": {"displayMode": "table", "placement": "right", "calcs": ["mean", "max"]}},
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (tier) (workload_inflight_requests{tier=~\"$tier\"})",
+          "legendFormat": "{{tier}}"
+        }
+      ]
+    }
+  ]
+}

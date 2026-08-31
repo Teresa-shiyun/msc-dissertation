@@ -1,0 +1,235 @@
+{
+  "base_seed": 20260710,
+  "seed_formula": "base_seed + block_id (independent RNG per block)",
+  "first_block": 6,
+  "blocks": 5,
+  "arms": [
+    "H50",
+    "H100",
+    "H115",
+    "G30",
+    "P30",
+    "F30"
+  ],
+  "traffic": "spike",
+  "total_runs": 30,
+  "run_order_offset": 30,
+  "prev_last_arm": "H50",
+  "block_balanced": true,
+  "no_consecutive_same_arm_internal": true,
+  "boundary_prev_last_ne_new_first": true,
+  "run_order_contiguous": true,
+  "execution_plan": "docs/execution_plan_hpa_predictor_v2.md",
+  "schedule": [
+    {
+      "run_order": 31,
+      "block_id": 6,
+      "arm": "G30",
+      "traffic": "spike",
+      "rep": 6
+    },
+    {
+      "run_order": 32,
+      "block_id": 6,
+      "arm": "F30",
+      "traffic": "spike",
+      "rep": 6
+    },
+    {
+      "run_order": 33,
+      "block_id": 6,
+      "arm": "P30",
+      "traffic": "spike",
+      "rep": 6
+    },
+    {
+      "run_order": 34,
+      "block_id": 6,
+      "arm": "H50",
+      "traffic": "spike",
+      "rep": 6
+    },
+    {
+      "run_order": 35,
+      "block_id": 6,
+      "arm": "H100",
+      "traffic": "spike",
+      "rep": 6
+    },
+    {
+      "run_order": 36,
+      "block_id": 6,
+      "arm": "H115",
+      "traffic": "spike",
+      "rep": 6
+    },
+    {
+      "run_order": 37,
+      "block_id": 7,
+      "arm": "G30",
+      "traffic": "spike",
+      "rep": 7
+    },
+    {
+      "run_order": 38,
+      "block_id": 7,
+      "arm": "H50",
+      "traffic": "spike",
+      "rep": 7
+    },
+    {
+      "run_order": 39,
+      "block_id": 7,
+      "arm": "P30",
+      "traffic": "spike",
+      "rep": 7
+    },
+    {
+      "run_order": 40,
+      "block_id": 7,
+      "arm": "H100",
+      "traffic": "spike",
+      "rep": 7
+    },
+    {
+      "run_order": 41,
+      "block_id": 7,
+      "arm": "F30",
+      "traffic": "spike",
+      "rep": 7
+    },
+    {
+      "run_order": 42,
+      "block_id": 7,
+      "arm": "H115",
+      "traffic": "spike",
+      "rep": 7
+    },
+    {
+      "run_order": 43,
+      "block_id": 8,
+      "arm": "P30",
+      "traffic": "spike",
+      "rep": 8
+    },
+    {
+      "run_order": 44,
+      "block_id": 8,
+      "arm": "F30",
+      "traffic": "spike",
+      "rep": 8
+    },
+    {
+      "run_order": 45,
+      "block_id": 8,
+      "arm": "H100",
+      "traffic": "spike",
+      "rep": 8
+    },
+    {
+      "run_order": 46,
+      "block_id": 8,
+      "arm": "G30",
+      "traffic": "spike",
+      "rep": 8
+    },
+    {
+      "run_order": 47,
+      "block_id": 8,
+      "arm": "H50",
+      "traffic": "spike",
+      "rep": 8
+    },
+    {
+      "run_order": 48,
+      "block_id": 8,
+      "arm": "H115",
+      "traffic": "spike",
+      "rep": 8
+    },
+    {
+      "run_order": 49,
+      "block_id": 9,
+      "arm": "G30",
+      "traffic": "spike",
+      "rep": 9
+    },
+    {
+      "run_order": 50,
+      "block_id": 9,
+      "arm": "H100",
+      "traffic": "spike",
+      "rep": 9
+    },
+    {
+      "run_order": 51,
+      "block_id": 9,
+      "arm": "H50",
+      "traffic": "spike",
+      "rep": 9
+    },
+    {
+      "run_order": 52,
+      "block_id": 9,
+      "arm": "F30",
+      "traffic": "spike",
+      "rep": 9
+    },
+    {
+      "run_order": 53,
+      "block_id": 9,
+      "arm": "P30",
+      "traffic": "spike",
+      "rep": 9
+    },
+    {
+      "run_order": 54,
+      "block_id": 9,
+      "arm": "H115",
+      "traffic": "spike",
+      "rep": 9
+    },
+    {
+      "run_order": 55,
+      "block_id": 10,
+      "arm": "H50",
+      "traffic": "spike",
+      "rep": 10
+    },
+    {
+      "run_order": 56,
+      "block_id": 10,
+      "arm": "G30",
+      "traffic": "spike",
+      "rep": 10
+    },
+    {
+      "run_order": 57,
+      "block_id": 10,
+      "arm": "F30",
+      "traffic": "spike",
+      "rep": 10
+    },
+    {
+      "run_order": 58,
+      "block_id": 10,
+      "arm": "P30",
+      "traffic": "spike",
+      "rep": 10
+    },
+    {
+      "run_order": 59,
+      "block_id": 10,
+      "arm": "H115",
+      "traffic": "spike",
+      "rep": 10
+    },
+    {
+      "run_order": 60,
+      "block_id": 10,
+      "arm": "H100",
+      "traffic": "spike",
+      "rep": 10
+    }
+  ]
+}

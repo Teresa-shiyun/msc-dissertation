@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: workload-cloud
+  namespace: workload
+  labels:
+    app: workload
+    tier: cloud
+spec:
+  type: ClusterIP
+  selector:
+    app: workload
+    tier: cloud
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: workload-edge
+  namespace: workload
+  labels:
+    app: workload
+    tier: edge
+spec:
+  type: ClusterIP
+  selector:
+    app: workload
+    tier: edge
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: workload
+  namespace: workload
+  labels:
+    app: workload
+spec:
+  type: ClusterIP
+  selector:
+    app: workload
+  ports:
+    - name: http
+      port: 80
+      targetPort: http

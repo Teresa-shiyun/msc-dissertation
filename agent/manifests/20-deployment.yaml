@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orchestration-agent
+  namespace: tools
+  labels:
+    app: orchestration-agent
+    arm: C
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orchestration-agent
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: orchestration-agent
+        arm: C
+    spec:
+      serviceAccountName: orchestration-agent
+      tolerations:
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: "Exists"
+          effect: "NoSchedule"
+      containers:
+        - name: agent
+          image: orchestration-agent:0.1.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - "run"
+            - "--policy"
+            - "$(AGENT_POLICY)"
+            - "--interval"
+            - "10"
+            - "--log-level"
+            - "INFO"
+          env:
+            - name: AGENT_POLICY
+              value: "policies/thresholds_v1.yaml"
+            - name: PROMETHEUS_URL
+              value: "http://kube-prom-stack-prometheus.monitoring.svc:9090"
+            - name: PYTHONUNBUFFERED
+              value: "1"
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "128Mi"

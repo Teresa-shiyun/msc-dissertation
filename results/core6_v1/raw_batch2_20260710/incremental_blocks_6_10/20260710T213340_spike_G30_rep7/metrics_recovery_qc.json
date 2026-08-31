@@ -1,0 +1,112 @@
+{
+  "run_id": "20260710T213340_spike_G30_rep7",
+  "window": {
+    "t_start": "2026-07-10T21:34:22Z",
+    "t_end": "2026-07-10T21:45:21Z",
+    "step": "10s"
+  },
+  "condition_1_exact_window_used": true,
+  "condition_2_unmodified_query_catalogue": true,
+  "condition_4_5_all_metrics_present": {
+    "missing_metrics": [],
+    "row_counts": {
+      "replicas_status": 132,
+      "replicas_spec": 132,
+      "cpu_cores": 388,
+      "cpu_utilisation": 386,
+      "mem_mib": 397,
+      "rps": 66,
+      "lat50_ms": 65,
+      "lat95_ms": 65,
+      "lat99_ms": 65,
+      "inflight": 132
+    },
+    "ok": true
+  },
+  "condition_3_check_metrics_csv_complete": {
+    "ok": true,
+    "reason": ""
+  },
+  "condition_6_time_coverage": {
+    "t_start_epoch": 1783719262.0,
+    "t_end_epoch": 1783719921.0,
+    "min_sample_ts": 1783719262.0,
+    "max_sample_ts": 1783719912.0,
+    "start_gap_seconds": 0.0,
+    "end_gap_seconds": 9.0,
+    "ok": true
+  },
+  "condition_7_no_gap_over_30s": {
+    "ok": true,
+    "reason": ""
+  },
+  "condition_8_labels": {
+    "replicas_status_labels": [
+      "deployment=workload-cloud",
+      "deployment=workload-edge"
+    ],
+    "replicas_spec_labels": [
+      "deployment=workload-cloud",
+      "deployment=workload-edge"
+    ],
+    "cpu_cores_pod_labels": [
+      "pod=workload-cloud-6f545f89ff-9hvzm",
+      "pod=workload-cloud-6f545f89ff-9k5kt",
+      "pod=workload-cloud-6f545f89ff-r28zz",
+      "pod=workload-cloud-6f545f89ff-tl9wt",
+      "pod=workload-cloud-6f545f89ff-w4tp5",
+      "pod=workload-cloud-6f545f89ff-w6g8w",
+      "pod=workload-edge-7b875fd8c6-pxwvc"
+    ],
+    "rps_labels": [
+      "tier=cloud"
+    ],
+    "lat95_ms_labels": [
+      "tier=cloud"
+    ],
+    "inflight_labels": [
+      "tier=cloud",
+      "tier=edge"
+    ],
+    "deployment_label_ok": true,
+    "tier_label_ok": true,
+    "note": "export-metrics.py queries are namespace-wide by design (matches every prior successful run, e.g. block6) -- edge-tier/edge-deployment labels are expected to co-occur, not a defect. Presence (not exclusivity) of workload-cloud/tier=cloud is the correct check.",
+    "pod_lifecycle_cross_check": {
+      "pods_observed_in_original_pod_lifecycle_jsonl": [
+        "workload-cloud-6f545f89ff-9hvzm",
+        "workload-cloud-6f545f89ff-9k5kt",
+        "workload-cloud-6f545f89ff-r28zz",
+        "workload-cloud-6f545f89ff-tl9wt",
+        "workload-cloud-6f545f89ff-w4tp5",
+        "workload-cloud-6f545f89ff-w6g8w",
+        "workload-cloud-6f545f89ff-zg8ng"
+      ],
+      "pods_present_in_recovered_cpu_cores_metric": [
+        "workload-cloud-6f545f89ff-9hvzm",
+        "workload-cloud-6f545f89ff-9k5kt",
+        "workload-cloud-6f545f89ff-r28zz",
+        "workload-cloud-6f545f89ff-tl9wt",
+        "workload-cloud-6f545f89ff-w4tp5",
+        "workload-cloud-6f545f89ff-w6g8w"
+      ],
+      "pods_in_lifecycle_but_missing_from_cpu_metric": [
+        "workload-cloud-6f545f89ff-zg8ng"
+      ],
+      "explanation": "cpu_cores uses rate(...[1m]); a pod alive for well under 1 minute (e.g. a brief agent scale-up/down blip) can be captured by the pod-lifecycle poller but produce no rate() sample. This is an expected Prometheus rate-window artifact, not evidence of a data gap."
+    }
+  },
+  "condition_9_source": "all rows written directly from live Prometheus query_range HTTP responses via unmodified export-metrics.py; no manual/interpolated/constant values",
+  "all_conditions_ok": true,
+  "condition_8_ok": true,
+  "verdict": "RECOVERY_COMPLETE_AND_QC_PASS",
+  "supplementary_non_prometheus_qc": {
+    "workload_pod_violations_check": {
+      "ok": true,
+      "violations": [],
+      "source": "existing pod_lifecycle.jsonl from the original run, LifecycleTracker.check_validity() unmodified"
+    },
+    "agent_policy_match_check": {
+      "note": "Not re-derivable now (orchestration-agent is scaled to 0 as part of clean-baseline restoration; live re-query would reflect current state, not the state during the run). The original runs own execution log already recorded \"Selecting policy policies/ablation_g30.yaml\" / \"Arm G30 (guarded predictive, cooldown 30s) active\" before k6 started, matching qc_checks.EXPECTED_AGENT_POLICY[\"G30\"]. Not independently re-verified via a fresh kubectl query in this recovery pass."
+    }
+  }
+}

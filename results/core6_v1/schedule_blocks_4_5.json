@@ -1,0 +1,109 @@
+{
+  "base_seed": 20260710,
+  "seed_formula": "base_seed + block_id (independent RNG per block)",
+  "first_block": 4,
+  "blocks": 2,
+  "arms": [
+    "H50",
+    "H100",
+    "H115",
+    "G30",
+    "P30",
+    "F30"
+  ],
+  "traffic": "spike",
+  "total_runs": 12,
+  "run_order_offset": 18,
+  "prev_last_arm": "H115",
+  "block_balanced": true,
+  "no_consecutive_same_arm_internal": true,
+  "boundary_prev_last_ne_new_first": true,
+  "run_order_contiguous": true,
+  "execution_plan": "docs/execution_plan_hpa_predictor_v2.md",
+  "schedule": [
+    {
+      "run_order": 19,
+      "block_id": 4,
+      "arm": "H100",
+      "traffic": "spike",
+      "rep": 4
+    },
+    {
+      "run_order": 20,
+      "block_id": 4,
+      "arm": "P30",
+      "traffic": "spike",
+      "rep": 4
+    },
+    {
+      "run_order": 21,
+      "block_id": 4,
+      "arm": "G30",
+      "traffic": "spike",
+      "rep": 4
+    },
+    {
+      "run_order": 22,
+      "block_id": 4,
+      "arm": "H115",
+      "traffic": "spike",
+      "rep": 4
+    },
+    {
+      "run_order": 23,
+      "block_id": 4,
+      "arm": "F30",
+      "traffic": "spike",
+      "rep": 4
+    },
+    {
+      "run_order": 24,
+      "block_id": 4,
+      "arm": "H50",
+      "traffic": "spike",
+      "rep": 4
+    },
+    {
+      "run_order": 25,
+      "block_id": 5,
+      "arm": "P30",
+      "traffic": "spike",
+      "rep": 5
+    },
+    {
+      "run_order": 26,
+      "block_id": 5,
+      "arm": "G30",
+      "traffic": "spike",
+      "rep": 5
+    },
+    {
+      "run_order": 27,
+      "block_id": 5,
+      "arm": "H115",
+      "traffic": "spike",
+      "rep": 5
+    },
+    {
+      "run_order": 28,
+      "block_id": 5,
+      "arm": "F30",
+      "traffic": "spike",
+      "rep": 5
+    },
+    {
+      "run_order": 29,
+      "block_id": 5,
+      "arm": "H100",
+      "traffic": "spike",
+      "rep": 5
+    },
+    {
+      "run_order": 30,
+      "block_id": 5,
+      "arm": "H50",
+      "traffic": "spike",
+      "rep": 5
+    }
+  ]
+}

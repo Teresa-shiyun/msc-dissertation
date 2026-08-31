@@ -1,0 +1,33 @@
+{
+  "run_id": "20260710T213340_spike_G30_rep7",
+  "schema": "block7_g30_adjudication_manifest_v1",
+  "adjudication_status": "RECOVERY_COMPLETE_AND_QC_PASS",
+  "effective_data_status": "VALID_AFTER_HISTORICAL_METRICS_REEXPORT",
+  "effective_metrics_file": "metrics_recovered.csv",
+  "rerun_performed": false,
+  "load_replayed": false,
+  "eligible_for_primary_analysis": true,
+  "window": {
+    "t_start": "2026-07-10T21:34:22Z",
+    "t_end": "2026-07-10T21:45:21Z",
+    "step": "10s"
+  },
+  "original_validity": "invalid_needs_review",
+  "original_invalid_reason": "metrics_csv_no_data_rows",
+  "reasons": [
+    "original load fully executed (k6 job Complete, 0 workload pod-lifecycle violations)",
+    "Prometheus retained the complete formal measurement window",
+    "all 10 required metrics recovered",
+    "time coverage and gap QC passed (check_no_prometheus_gap, max_gap_seconds=30.0, unmodified)",
+    "adjudication rule was frozen (block7_g30_recovery_plan.md) before any recovered performance value was read",
+    "acceptance was not decided based on whether the recovered numbers looked favourable"
+  ],
+  "user_authorization_recorded_at": "2026-07-10T22:20:37Z",
+  "source_records": {
+    "plan": "block7_g30_recovery_plan.md",
+    "adjudication": "block7_g30_recovery_decision.md",
+    "qc": "metrics_recovery_qc.json",
+    "original_invalid_incident": "block7_attempt3_portforward_failure.md"
+  },
+  "immutability_note": "This manifest does not modify runs.csv, meta.json, or the original metrics.csv (still header-only). Those remain permanently invalid_needs_review/metrics_csv_no_data_rows."
+}

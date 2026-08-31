@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "orchestration-agent"
+version = "0.1.0"
+description = "Custom orchestration agent for the cloud/edge dissertation testbed."
+requires-python = ">=3.11"
+dependencies = [
+  "kubernetes>=29.0.0",
+  "requests>=2.32.0",
+  "PyYAML>=6.0.0",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest>=8.0",
+  "pytest-cov>=5.0",
+]
+analysis = [
+  "pandas>=2.0",
+  "matplotlib>=3.7",
+  "scipy>=1.11",
+  "numpy>=1.26",
+]
+
+[project.scripts]
+agent = "orchestration_agent.main:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

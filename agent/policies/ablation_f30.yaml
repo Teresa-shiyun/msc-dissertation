@@ -1,0 +1,21 @@
+name: ablation_f30
+arm_id: F30
+mode: predictive_guarded
+
+target:
+  namespace: workload
+  deployment: workload-cloud
+  pod_prefix: workload-cloud
+  tier: cloud
+
+bounds:
+  min_replicas: 1
+  max_replicas: 6
+
+cooldowns:
+  scale_up_seconds:   30
+  scale_down_seconds: 180
+
+prediction_enabled_in_decision: false
+
+model_path: ablation_guarded_margin110_model.json

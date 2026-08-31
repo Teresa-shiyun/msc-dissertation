@@ -1,0 +1,37 @@
+fullnameOverride: kube-prom-stack
+
+prometheus:
+  prometheusSpec:
+    retention: 7d
+    scrapeInterval: 10s
+    evaluationInterval: 10s
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+    ruleSelectorNilUsesHelmValues: false
+    resources:
+      requests:
+        cpu: 200m
+        memory: 512Mi
+      limits:
+        cpu: 1000m
+        memory: 1Gi
+
+grafana:
+  adminPassword: prom-operator
+  service:
+    type: ClusterIP
+  defaultDashboardsTimezone: browser
+  sidecar:
+    dashboards:
+      enabled: true
+      label: grafana_dashboard
+      searchNamespace: ALL
+
+alertmanager:
+  enabled: false
+
+kubeStateMetrics:
+  enabled: true
+
+nodeExporter:
+  enabled: true

@@ -1,0 +1,21 @@
+{
+  "run_id": "20260711T040706_spike_H50_rep10",
+  "arm": "H50",
+  "traffic": "spike",
+  "repetition": 10,
+  "block_id": 10,
+  "session_id": "S20_20260711_stageC_block10_attempt3",
+  "batch_id": "B2_20260710_stageA",
+  "schedule_seed": 20260710,
+  "calibration_p95_ms": "4.591",
+  "validity": "valid",
+  "invalid_reason": "",
+  "started_at": "2026-07-11T04:07:06Z",
+  "t_start": "2026-07-11T04:07:44Z",
+  "t_end": "2026-07-11T04:18:29Z",
+  "k6_status": "complete",
+  "warmup_seconds": 30,
+  "cooldown_seconds": 60,
+  "k6_script": "workload/loadgen/k6-spike.js",
+  "work_n": "3000"
+}

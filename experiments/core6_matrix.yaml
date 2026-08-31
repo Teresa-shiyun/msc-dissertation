@@ -1,0 +1,47 @@
+version: 1
+
+defaults:
+  warmup_seconds:   30
+  cooldown_seconds: 60
+  repetitions:       1
+  k6_image:         "grafana/k6:0.54.0"
+  work_n:           "3000"
+
+arms:
+  - id: H50
+    apply_arm: h50
+    description: "Native HPA-RPS, target 50 req/s/pod. Conservative reference baseline (Execution Plan v2 §5b) -- NOT used to claim predictive arms 'beat HPA'."
+
+  - id: H100
+    apply_arm: h100
+    description: "Native HPA-RPS, target 100 req/s/pod. Target-sensitivity diagnostic midpoint (Execution Plan v2 §5a) and secondary matched-headroom bracket (§5b)."
+
+  - id: H115
+    apply_arm: h115
+    description: "Native HPA-RPS, target 115 req/s/pod (~92% of 125 RPS/pod single-pod capacity). Primary matched-headroom comparator for G30/P30/F30 (Execution Plan v2 §5b)."
+
+  - id: G30
+    apply_arm: g30
+    description: "Guarded predictive agent, Ridge forecast, cooldown 30s (existing arm, unchanged)."
+    restart_agent: true
+
+  - id: P30
+    apply_arm: p30
+    description: "Guarded predictive agent, persistence forecast, cooldown 30s. Identical to G30 except forecast source (Execution Plan v2 §4)."
+    restart_agent: true
+
+  - id: F30
+    apply_arm: f30
+    description: "Guarded agent, prediction ablated (guards only), cooldown 30s (existing arm, unchanged)."
+    restart_agent: true
+
+traffics:
+  - id: smoke
+    description: "60-second tiny load -- per-arm smoke checks only, excluded from formal analysis."
+    script_file: workload/loadgen/k6-smoke.js
+    expected_duration_seconds: 60
+
+  - id: spike
+    description: "Calm -> 5x burst -> calm, ~10 minutes. The core-6 matrix's only formal traffic."
+    script_file: workload/loadgen/k6-spike.js
+    expected_duration_seconds: 600

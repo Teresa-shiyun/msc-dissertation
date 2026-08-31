@@ -1,0 +1,63 @@
+{
+  "name": "ablation_p30_persistence_model",
+  "model_type": "persistence_next_total_rps",
+  "forecast_source": "persistence",
+  "trained_from": "n/a - no trainable parameters, predicted_total_rps(t+h) = observed total_rps(t)",
+  "horizon_seconds": 30,
+  "feature_names": [
+    "replicas",
+    "total_rps",
+    "rps_per_pod",
+    "cpu_60s",
+    "lat95_ms",
+    "d_total_rps",
+    "d_cpu_60s",
+    "d_lat95_ms"
+  ],
+  "intercept": 676.0912284297475,
+  "coefficients": {
+    "replicas": 46.716868299527036,
+    "total_rps": 359.7438175976723,
+    "rps_per_pod": 27.497215094306966,
+    "cpu_60s": -12.471143286919002,
+    "lat95_ms": 0.2775168837501206,
+    "d_total_rps": 90.1497226279811,
+    "d_cpu_60s": -6.588485767297902,
+    "d_lat95_ms": 10.430829203293936
+  },
+  "feature_mean": {
+    "replicas": 3.7496229260935143,
+    "total_rps": 656.9980994767662,
+    "rps_per_pod": 218.31875895463907,
+    "cpu_60s": 1.450599779463273,
+    "lat95_ms": 64.05435609779703,
+    "d_total_rps": 21.405475777628535,
+    "d_cpu_60s": 0.046793106038257155,
+    "d_lat95_ms": 2.326584586865688
+  },
+  "feature_scale": {
+    "replicas": 2.306603218989228,
+    "total_rps": 432.33147312739396,
+    "rps_per_pod": 190.81325991833162,
+    "cpu_60s": 1.1815944175694344,
+    "lat95_ms": 64.41795064670454,
+    "d_total_rps": 120.17924162039847,
+    "d_cpu_60s": 0.3120603866869921,
+    "d_lat95_ms": 13.793036220101607
+  },
+  "capacity_rps_per_pod": 125,
+  "scale_margin": 1.1,
+  "latency_guard_ms": 120.0,
+  "cpu_guard": 0.8,
+  "reactive_guard_margin": 1.25,
+  "spike_guard_delta_rps": 100.0,
+  "spike_guard_add_replicas": 2,
+  "latency_guard_add_replicas": 1,
+  "scale_down_lat95_guard_ms": 150.0,
+  "guard_note": "Ablation arm P30 (Execution Plan v2 docs/execution_plan_hpa_predictor_v2.md, Phase 3). IDENTICAL to ablation_guarded_margin110_model.json (arm G30) in every field EXCEPT forecast_source: 'ridge' -> 'persistence'. The feature_names/intercept/coefficients/feature_mean/feature_scale block below is copied byte-for-byte from G30's model so a config mistake that accidentally leaves forecast_source unset falls back to G30's exact Ridge behaviour rather than an undefined one -- but with forecast_source='persistence' set, predictive_engine._forecast_total_rps() bypasses these Ridge fields entirely and uses the last observed total_rps instead. capacity_rps_per_pod / scale_margin / all guard knobs / scale_down_lat95_guard_ms are unchanged from G30 so only the forecast source differs (see agent/tests/test_ablation_invariants.py::test_inv11_g30_vs_p30_only_forecast_source).",
+  "trained_from_model": "ablation_guarded_margin110_model.json",
+  "training_rows": null,
+  "validation_rows": null,
+  "training_metrics": null,
+  "validation_metrics": null
+}
